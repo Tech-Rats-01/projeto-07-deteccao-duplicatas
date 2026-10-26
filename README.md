@@ -1,4 +1,4 @@
-# Projeto 07 — Detecção de elementos duplicados
+# Projeto 07 - Detecção de elementos duplicados
 
 Programa em C que verifica se um vetor contém valores repetidos e conta as comparações realizadas até encontrar uma duplicata ou terminar a busca.
 
