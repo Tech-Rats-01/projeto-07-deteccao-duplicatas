@@ -10,6 +10,7 @@ Este projeto implementa um algoritmo de detecção de elementos duplicados em ve
 
 ## Pré-requisitos
 
+Para compilar e executar o projeto no Windows, é necessário instalar o GCC por meio do MSYS2.
 
 1. Instalação do MSYS2
 
