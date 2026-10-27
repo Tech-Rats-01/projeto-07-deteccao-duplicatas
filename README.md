@@ -86,6 +86,102 @@ Depois, execute:
 ```powershell
 .\build\duplicatas.exe
 ```
+## Funcionamento do algoritmo
+
+bool tem_duplicado(const int vetor[], size_t n, uint64_t *comparacoes);
+
+O algoritmo utiliza dois laços de repetição. O primeiro seleciona um elemento do vetor e o segundo compara esse elemento com todos os elementos que aparecem depois dele.
+
+A estrutura principal é:
+
+for (size_t i = 0; i + 1 < n; i++) {
+    for (size_t j = i + 1; j < n; j++) {
+        (*comparacoes)++;
+
+        if (vetor[i] == vetor[j]) {
+            return true;
+        }
+    }
+}
+
+Como j começa em i + 1, o algoritmo evita comparações desnecessárias. Um elemento não é comparado consigo mesmo e um mesmo par não é analisado duas vezes.
+
+Por exemplo, depois de comparar as posições (0, 1), não existe necessidade de posteriormente comparar (1, 0).
+
+A variável apontada por comparacoes registra quantas comparações entre elementos foram efetivamente realizadas.
+
+Se dois elementos iguais forem encontrados, a função retorna true. Caso todos os pares sejam analisados sem encontrar uma duplicata, a função retorna false.
+
+## Melhor caso e parada antecipada
+
+O melhor caso ocorre quando a duplicata está presente logo no primeiro par analisado pelo algoritmo.
+
+No programa, o vetor utilizado para representar esse cenário é:
+
+[0, 0, 2, 3, 4, 5, 6, 7, 8, 9]
+
+A primeira comparação realizada é:
+
+vetor[0] == vetor[1]
+0 == 0
+
+Como os dois valores são iguais, a duplicata é identificada imediatamente.
+
+Nesse momento é executado:
+
+return true;
+
+O return encerra imediatamente a execução da função, portanto nenhuma outra comparação entre elementos é necessária.
+
+Esse comportamento é chamado de parada antecipada (early stopping ou early return).
+
+Dessa forma, no melhor caso são realizadas apenas:
+
+1 comparação
+
+Considerando a comparação entre elementos como a operação fundamental analisada, o melhor caso apresenta comportamento constante:
+
+Ω(1)
+
+Isso significa que, no cenário mais favorável, a quantidade de comparações necessária para encontrar uma duplicata não cresce com o tamanho do vetor.
+
+## Pior caso
+
+O pior caso utilizado pelo programa é representado pelo vetor:
+
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+Como não existem elementos repetidos, a condição:
+
+vetor[i] == vetor[j]
+
+nunca é verdadeira.
+
+Consequentemente, a parada antecipada não acontece e o algoritmo precisa analisar todos os pares possíveis.
+
+Para um vetor contendo n elementos, a quantidade de comparações é:
+
+(n - 1) + (n - 2) + ... + 2 + 1
+
+Essa soma pode ser representada pela fórmula:
+
+n(n - 1) / 2
+
+Para o vetor utilizado no programa, temos n = 10:
+
+10(10 - 1) / 2
+10 × 9 / 2
+90 / 2
+45
+
+Portanto, são realizadas:
+
+45 comparações
+
+O número de comparações cresce quadraticamente em função do tamanho do vetor. Assim, a complexidade do pior caso é:
+
+Θ(n²)
+
 
 ## Casos demonstrados
 
