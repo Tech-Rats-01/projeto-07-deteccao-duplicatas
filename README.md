@@ -1,4 +1,4 @@
-# Projeto 07 — Detecção de elementos duplicados
+# Projeto 07 - Detecção de elementos duplicados
 
 Este projeto implementa um algoritmo de detecção de elementos duplicados em vetores utilizando a comparação de pares. O programa contabiliza o número de comparações realizadas e permite analisar o melhor e pior caso do algoritmo.
 
