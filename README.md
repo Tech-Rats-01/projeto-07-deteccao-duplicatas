@@ -51,6 +51,12 @@ Abra um novo terminal do Windows e execute:
 
 Se o comando exibir as informações da versão do GCC, a instalação e a configuração do PATH foram realizadas corretamente.
 
+## Objetivos
+
+O projeto tem como objetivo implementar e analisar um algoritmo em C capaz de identificar elementos duplicados em um vetor. Além da detecção de valores repetidos, o programa contabiliza a quantidade de comparações realizadas durante a busca.
+
+Com isso, é possível observar na prática a diferença entre o melhor e o pior caso do algoritmo, relacionando os resultados obtidos durante a execução com a análise teórica e matemática de sua complexidade.
+
 ## Funcionamento
 
 Cada elemento é comparado com os seguintes usando dois laços `for`. O segundo laço começa em `j = i + 1`, evitando comparar uma posição consigo mesma ou repetir um par.
