@@ -193,3 +193,128 @@ O programa executa dois vetores de dez elementos, definidos em `src/main.c`:
 | Pior | Todos os valores distintos | 45 |
 
 A saída mostra os vetores, a existência de duplicatas e as comparações obtidas. Também informa se a detecção e a contagem correspondem ao esperado.
+
+
+# Testes com diferentes tamanhos de vetores
+
+Para analisar o comportamento do algoritmo, foram considerados diferentes tamanhos de vetores, permitindo observar como a quantidade de comparações varia conforme o número de elementos.
+
+## Foram considerados dois cenários:
+
+Melhor caso: a duplicata está no primeiro par examinado, permitindo que o algoritmo encerre a busca após uma comparação.
+Pior caso: todos os elementos são distintos, obrigando o algoritmo a examinar todos os pares possíveis.
+Tabela de comparações
+
+No pior caso, a quantidade de comparações é calculada pela fórmula:
+
+𝐶(𝑛)=𝑛(𝑛−1)
+
+
+A tabela apresenta os valores esperados para diferentes tamanhos de vetores.
+
+Tamanho do vetor	Melhor caso	Pior caso
+2	1	1
+5	1	10
+10	1	45
+20	1	190
+50	1	1.225
+100	1	4.950
+500	1	124.750
+1.000	1	499.500
+
+Observação: os valores apresentados são resultados teóricos esperados, calculados com base na lógica do algoritmo. A implementação atual demonstra diretamente os casos com vetores de tamanho 10. Os demais tamanhos são utilizados para ilustrar o comportamento previsto do algoritmo.
+
+## Análise dos resultados
+
+Os resultados mostram que o número de comparações depende da posição em que a duplicata é encontrada e do tamanho do vetor.
+
+No melhor caso, a duplicata aparece logo na primeira comparação. O algoritmo identifica os valores iguais e encerra a execução por meio do comando return true. Assim, é realizada apenas uma comparação entre elementos, independentemente do tamanho do vetor, desde que ele possua pelo menos dois elementos e a duplicata esteja no primeiro par examinado.
+
+No pior caso, todos os elementos são distintos. Como nenhuma duplicata é encontrada, o algoritmo precisa comparar todos os pares possíveis antes de retornar false.
+
+Por exemplo, para um vetor de 10 elementos, são realizadas 45 comparações. Para um vetor de 100 elementos, esse número aumenta para 4.950 comparações.
+
+Esse comportamento demonstra a diferença entre os cenários analisados: considerando a quantidade de comparações entre elementos, o melhor caso apresenta complexidade 
+Θ(1), enquanto o pior caso apresenta complexidade 
+Θ(𝑛2).
+
+## Conclusão dos testes
+
+A análise permite compreender como a parada antecipada influencia o desempenho do algoritmo. Quando uma duplicata é encontrada rapidamente, a quantidade de comparações é reduzida. Quando não existem elementos repetidos, todos os pares precisam ser examinados.
+
+Portanto, a contagem de comparações permite analisar o comportamento do algoritmo e compreender como o aumento do tamanho do vetor influencia a quantidade de operações realizadas.
+
+
+# Análise teórica da complexidade
+
+Esta seção apresenta a análise matemática do algoritmo de detecção de elementos duplicados, considerando a quantidade de comparações entre elementos como operação fundamental.
+
+## 1. Dedução da soma de passos no pior caso
+
+O pior caso ocorre quando todos os elementos do vetor são distintos. Nessa situação, o algoritmo precisa examinar todos os pares possíveis, pois nenhuma duplicata é encontrada.
+
+Para um vetor de tamanho n, o primeiro elemento é comparado com os n - 1 elementos seguintes. O segundo é comparado com os n - 2 seguintes, e assim sucessivamente, até a última comparação.
+
+A quantidade total de comparações é representada pela soma:
+
+C(n) = (n - 1) + (n - 2) + ... + 2 + 1
+
+Reorganizando os termos:
+
+C(n) = 1 + 2 + 3 + ... + (n - 2) + (n - 1)
+
+Essa expressão corresponde à soma dos primeiros n - 1 números naturais positivos. Utilizando a fórmula da soma de uma progressão aritmética:
+
+S = (primeiro termo + último termo) × quantidade de termos / 2
+
+Temos:
+
+Primeiro termo: 1
+Último termo: n - 1
+Quantidade de termos: n - 1
+
+Substituindo os valores:
+
+C(n) = (1 + (n - 1)) × (n - 1) / 2
+
+Simplificando:
+
+C(n) = n × (n - 1) / 2
+
+Portanto, a quantidade de comparações no pior caso é C(n) = n(n - 1)/2.
+
+Desenvolvendo a expressão:
+
+C(n) = (n² - n)/2 = n²/2 - n/2
+
+O termo dominante é n², indicando crescimento quadrático.
+
+## 2. Prova de que o pior caso pertence a O(n²)
+
+A notação Big O representa um limite superior assintótico para o crescimento da quantidade de operações.
+
+Formalmente, uma função pertence a O(n²) quando existem constantes positivas c e n₀ tais que 0 ≤ C(n) ≤ c × n² para todo n ≥ n₀.
+
+No pior caso, temos:
+
+C(n) = n(n - 1)/2
+
+Como n - 1 ≤ n para n ≥ 1, podemos escrever:
+
+C(n) = n(n - 1)/2 ≤ n²/2
+
+Escolhendo c = 1/2 e n₀ = 1, a condição formal é satisfeita. Portanto, o algoritmo pertence a O(n²) no pior caso.
+
+Isso significa que a quantidade de comparações cresce, no máximo, proporcionalmente ao quadrado do tamanho do vetor, desconsiderando constantes multiplicativas e termos de menor ordem.
+
+## 3. Prova de que o melhor caso pertence a Ω(1)
+
+A notação Big Omega representa um limite inferior assintótico.
+
+No melhor caso, a duplicata está nas posições 0 e 1. Para vetores com pelo menos dois elementos, o algoritmo realiza uma comparação e encerra imediatamente a execução.
+
+Assim, a quantidade de comparações no melhor caso é C_melhor(n) = 1, para n ≥ 2.
+
+Formalmente, uma função pertence a Ω(1) quando existem constantes positivas c e n₀ tais que C_melhor(n) ≥ c para todo n ≥ n₀.
+
+Escolhendo c = 1 e n₀ = 2, temos `C_melhor
