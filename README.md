@@ -1,76 +1,73 @@
-# Projeto 07 - Detecção de elementos duplicados
+# Projeto 07 — Detecção de elementos duplicados
 
-Este projeto implementa um algoritmo de detecção de elementos duplicados em vetores utilizando a comparação de pares. O programa contabiliza o número de comparações realizadas e permite analisar o melhor e pior caso do algoritmo.
-
-## Tecnologias utilizadas
-
- • Linguagem C
- • GCC (GNU Compiler Collection)
- • MSYS2 para ambiente de compilação no Windows
-
-## Pré-requisitos
-
-Para compilar e executar o projeto no Windows, é necessário instalar o GCC por meio do MSYS2.
-
-1. Instalação do MSYS2
-
-Acesse o site oficial e baixe o instalador:
-https://www.msys2.org/
-
-Siga as instruções de instalação disponibilizadas no site.
-
-2. Instalação do GCC
-
-Abra o terminal MSYS2 UCRT64 pelo menu Iniciar do Windows e execute:
-
-```pacman -S --needed mingw-w64-ucrt-x86_64-gcc
-```
-
-Caso seja solicitada uma confirmação, pressione Y e depois Enter.
-
-3. Configuração das variáveis de ambiente
-
-Para executar o GCC pelo Prompt de Comando ou pelo terminal do Visual Studio Code:
-
- a. Pesquise no menu Iniciar por Editar as variáveis de ambiente do sistema.
- b. Clique em Variáveis de Ambiente.
- c. Na seção Variáveis de usuário, selecione Path e clique em Editar.
- d. Clique em Novo e adicione o caminho:
-
- ``` C:\msys64\ucrt64\bin ```
-
- e. Confirme as alterações clicando em OK em todas as janelas.
-
- Observação: o caminho acima considera a instalação padrão do MSYS2 em C:\msys64. Caso tenha instalado em outro diretório, ajuste o caminho.
-
-4. Verificação da instalação
-
-Abra um novo terminal do Windows e execute:
-
-```gcc --version```
-
-Se o comando exibir as informações da versão do GCC, a instalação e a configuração do PATH foram realizadas corretamente.
+Programa em C que verifica se um vetor contém valores repetidos e conta as comparações realizadas até encontrar uma duplicata ou terminar a busca.
 
 ## Objetivos
 
-O projeto tem como objetivo implementar e analisar um algoritmo em C capaz de identificar elementos duplicados em um vetor. Além da detecção de valores repetidos, o programa contabiliza a quantidade de comparações realizadas durante a busca.
+Implementar a detecção de duplicatas por comparação de pares e analisar como a parada antecipada afeta a quantidade de comparações.
 
-Com isso, é possível observar na prática a diferença entre o melhor e o pior caso do algoritmo, relacionando os resultados obtidos durante a execução com a análise teórica e matemática de sua complexidade.
+O projeto considera dois cenários:
 
-## Funcionamento
+- Melhor caso: valores iguais nas posições 0 e 1.
+- Pior caso: todos os elementos distintos.
 
-Cada elemento é comparado com os seguintes usando dois laços `for`. O segundo laço começa em `j = i + 1`, evitando comparar uma posição consigo mesma ou repetir um par.
+## Tecnologias utilizadas
 
-Quando encontra dois valores iguais, a função encerra a busca e retorna `true`. Se terminar sem encontrar repetição, retorna `false`.
+- Linguagem C.
+- GCC para compilação.
+- MSYS2 UCRT64 como ambiente de compilação no Windows.
 
-O contador é zerado a cada chamada e considera apenas as comparações entre os elementos. O vetor recebido permanece inalterado.
+## Pré-requisitos
+
+As instruções abaixo utilizam o GCC instalado pelo MSYS2.
+
+### 1. Instalar o MSYS2
+
+Baixe o instalador no [site oficial do MSYS2](https://www.msys2.org/) e siga as instruções de instalação e configuração inicial.
+
+### 2. Instalar o GCC
+
+Abra o terminal **MSYS2 UCRT64** pelo menu Iniciar e execute:
+
+```bash
+pacman -S --needed mingw-w64-ucrt-x86_64-gcc
+```
+
+Se aparecer um pedido de confirmação, pressione `Y` e depois `Enter`.
+
+### 3. Configurar o PATH
+
+Para utilizar o GCC pelo PowerShell ou pelo terminal do VS Code:
+
+1. Pesquise no menu Iniciar por **Editar as variáveis de ambiente do sistema**.
+2. Clique em **Variáveis de Ambiente**.
+3. Na seção **Variáveis de usuário**, selecione `Path` e clique em **Editar**.
+4. Clique em **Novo** e adicione:
+
+   ```text
+   C:\msys64\ucrt64\bin
+   ```
+
+5. Confirme as alterações.
+
+Esse caminho considera a instalação do MSYS2 em `C:\msys64`. Se estiver em outra pasta, ajuste o caminho.
+
+### 4. Verificar a instalação
+
+Abra um novo terminal e execute:
+
+```powershell
+gcc --version
+```
+
+O comando deve mostrar a versão instalada do GCC. Se estiver utilizando o terminal integrado do VS Code, feche e abra novamente o editor para carregar o PATH atualizado.
 
 ## Arquivos
 
 - `src/duplicatas.c`: implementação do algoritmo.
 - `src/duplicatas.h`: declaração da função e suas condições de uso.
 - `src/main.c`: execução dos exemplos de melhor e pior caso.
-- `README.md`: documenta o projeto e as instruções de execução.
+- `README.md`: descrição do projeto e instruções de execução.
 
 ## Como compilar e executar
 
@@ -86,235 +83,197 @@ Depois, execute:
 ```powershell
 .\build\duplicatas.exe
 ```
+
 ## Funcionamento do algoritmo
 
+A função recebe o vetor, seu tamanho e o endereço de um contador:
+
+```c
 bool tem_duplicado(const int vetor[], size_t n, uint64_t *comparacoes);
+```
 
-O algoritmo utiliza dois laços de repetição. O primeiro seleciona um elemento do vetor e o segundo compara esse elemento com todos os elementos que aparecem depois dele.
+O primeiro laço seleciona um elemento pela posição `i`. O segundo percorre as posições seguintes usando `j`, que começa em `i + 1`.
 
-A estrutura principal é:
+A implementação segue esta estrutura:
 
-for (size_t i = 0; i + 1 < n; i++) {
-    for (size_t j = i + 1; j < n; j++) {
-        (*comparacoes)++;
+```c
+bool tem_duplicado(const int vetor[], size_t n, uint64_t *comparacoes)
+{
+    *comparacoes = 0;
 
-        if (vetor[i] == vetor[j]) {
-            return true;
+    for (size_t i = 0; i + 1 < n; i++) {
+        for (size_t j = i + 1; j < n; j++) {
+            (*comparacoes)++;
+
+            if (vetor[i] == vetor[j]) {
+                return true;
+            }
         }
     }
+
+    return false;
 }
+```
 
-Como j começa em i + 1, o algoritmo evita comparações desnecessárias. Um elemento não é comparado consigo mesmo e um mesmo par não é analisado duas vezes.
+Como `j` começa na posição seguinte a `i`, o algoritmo não compara uma posição consigo mesma nem repete um par na ordem inversa. Depois de comparar as posições `(0, 1)`, por exemplo, não precisa comparar `(1, 0)`.
 
-Por exemplo, depois de comparar as posições (0, 1), não existe necessidade de posteriormente comparar (1, 0).
+O contador é zerado a cada chamada e registra somente as comparações entre os elementos. Os testes que controlam os laços não entram nessa contagem.
 
-A variável apontada por comparacoes registra quantas comparações entre elementos foram efetivamente realizadas.
+Quando encontra dois valores iguais, `return true` encerra a função inteira. Se terminar a busca sem encontrar repetição, a função retorna `false`.
 
-Se dois elementos iguais forem encontrados, a função retorna true. Caso todos os pares sejam analisados sem encontrar uma duplicata, a função retorna false.
+O vetor recebido permanece inalterado. Para vetores vazios ou com um único elemento, a função retorna `false` com zero comparações.
 
-## Melhor caso e parada antecipada
+## Casos demonstrados pelo programa
 
-O melhor caso ocorre quando a duplicata está presente logo no primeiro par analisado pelo algoritmo.
+O arquivo `src/main.c` executa dois vetores de dez elementos:
 
-No programa, o vetor utilizado para representar esse cenário é:
-
-[0, 0, 2, 3, 4, 5, 6, 7, 8, 9]
-
-A primeira comparação realizada é:
-
-vetor[0] == vetor[1]
-0 == 0
-
-Como os dois valores são iguais, a duplicata é identificada imediatamente.
-
-Nesse momento é executado:
-
-return true;
-
-O return encerra imediatamente a execução da função, portanto nenhuma outra comparação entre elementos é necessária.
-
-Esse comportamento é chamado de parada antecipada (early stopping ou early return).
-
-Dessa forma, no melhor caso são realizadas apenas:
-
-1 comparação
-
-Considerando a comparação entre elementos como a operação fundamental analisada, o melhor caso apresenta comportamento constante:
-
-Ω(1)
-
-Isso significa que, no cenário mais favorável, a quantidade de comparações necessária para encontrar uma duplicata não cresce com o tamanho do vetor.
-
-## Pior caso
-
-O pior caso utilizado pelo programa é representado pelo vetor:
-
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-Como não existem elementos repetidos, a condição:
-
-vetor[i] == vetor[j]
-
-nunca é verdadeira.
-
-Consequentemente, a parada antecipada não acontece e o algoritmo precisa analisar todos os pares possíveis.
-
-Para um vetor contendo n elementos, a quantidade de comparações é:
-
-(n - 1) + (n - 2) + ... + 2 + 1
-
-Essa soma pode ser representada pela fórmula:
-
-n(n - 1) / 2
-
-Para o vetor utilizado no programa, temos n = 10:
-
-10(10 - 1) / 2
-10 × 9 / 2
-90 / 2
-45
-
-Portanto, são realizadas:
-
-45 comparações
-
-O número de comparações cresce quadraticamente em função do tamanho do vetor. Assim, a complexidade do pior caso é:
-
-Θ(n²)
-
-
-## Casos demonstrados
-
-O programa executa dois vetores de dez elementos, definidos em `src/main.c`:
-
-| Caso | Entrada | Comparações esperadas |
+| Caso | Vetor | Comparações |
 |---|---|---:|
-| Melhor | Valores iguais nas posições 0 e 1 | 1 |
-| Pior | Todos os valores distintos | 45 |
+| Melhor | `[0, 0, 2, 3, 4, 5, 6, 7, 8, 9]` | 1 |
+| Pior | `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]` | 45 |
 
-A saída mostra os vetores, a existência de duplicatas e as comparações obtidas. Também informa se a detecção e a contagem correspondem ao esperado.
+A saída mostra os vetores, a existência de duplicatas e as comparações obtidas. Também verifica se a detecção e a contagem correspondem ao esperado.
 
+### Melhor caso e parada antecipada
 
-# Testes com diferentes tamanhos de vetores
+No primeiro vetor, a primeira comparação verifica:
 
-Para analisar o comportamento do algoritmo, foram considerados diferentes tamanhos de vetores, permitindo observar como a quantidade de comparações varia conforme o número de elementos.
+```c
+vetor[0] == vetor[1]
+```
 
-## Foram considerados dois cenários:
+Os dois valores são iguais a zero. A função identifica a duplicata e executa `return true`, encerrando a busca após uma comparação.
 
-Melhor caso: a duplicata está no primeiro par examinado, permitindo que o algoritmo encerre a busca após uma comparação.
-Pior caso: todos os elementos são distintos, obrigando o algoritmo a examinar todos os pares possíveis.
-Tabela de comparações
+Esse comportamento é chamado de parada antecipada. Para qualquer vetor com pelo menos dois elementos e uma duplicata nas posições 0 e 1, o algoritmo realiza apenas uma comparação entre valores.
 
-No pior caso, a quantidade de comparações é calculada pela fórmula:
+### Pior caso
 
-𝐶(𝑛)=𝑛(𝑛−1)
+No segundo vetor, todos os valores são distintos. Nenhuma comparação encontra uma igualdade, então o algoritmo examina todos os pares antes de retornar `false`.
 
+Para dez elementos:
 
-A tabela apresenta os valores esperados para diferentes tamanhos de vetores.
+```text
+C(10) = 10 × (10 − 1) / 2
+      = 10 × 9 / 2
+      = 45 comparações
+```
 
-Tamanho do vetor	Melhor caso	Pior caso
-2	1	1
-5	1	10
-10	1	45
-20	1	190
-50	1	1.225
-100	1	4.950
-500	1	124.750
-1.000	1	499.500
+## Comparações esperadas para diferentes tamanhos de vetores
 
-Observação: os valores apresentados são resultados teóricos esperados, calculados com base na lógica do algoritmo. A implementação atual demonstra diretamente os casos com vetores de tamanho 10. Os demais tamanhos são utilizados para ilustrar o comportamento previsto do algoritmo.
+A tabela considera os mesmos cenários:
 
-## Análise dos resultados
+- Melhor caso: duplicata nas posições 0 e 1.
+- Pior caso: todos os elementos distintos.
 
-Os resultados mostram que o número de comparações depende da posição em que a duplicata é encontrada e do tamanho do vetor.
+No pior caso, a quantidade esperada de comparações é:
 
-No melhor caso, a duplicata aparece logo na primeira comparação. O algoritmo identifica os valores iguais e encerra a execução por meio do comando return true. Assim, é realizada apenas uma comparação entre elementos, independentemente do tamanho do vetor, desde que ele possua pelo menos dois elementos e a duplicata esteja no primeiro par examinado.
+```text
+C(n) = n(n − 1) / 2
+```
 
-No pior caso, todos os elementos são distintos. Como nenhuma duplicata é encontrada, o algoritmo precisa comparar todos os pares possíveis antes de retornar false.
+| Tamanho do vetor | Melhor caso | Pior caso |
+|---:|---:|---:|
+| 2 | 1 | 1 |
+| 5 | 1 | 10 |
+| 10 | 1 | 45 |
+| 20 | 1 | 190 |
+| 50 | 1 | 1.225 |
+| 100 | 1 | 4.950 |
+| 500 | 1 | 124.750 |
+| 1.000 | 1 | 499.500 |
 
-Por exemplo, para um vetor de 10 elementos, são realizadas 45 comparações. Para um vetor de 100 elementos, esse número aumenta para 4.950 comparações.
+Os valores desta tabela são teóricos, calculados pela fórmula. O programa em `src/main.c` executa os dois casos com vetores de tamanho 10.
 
-Esse comportamento demonstra a diferença entre os cenários analisados: considerando a quantidade de comparações entre elementos, o melhor caso apresenta complexidade 
-Θ(1), enquanto o pior caso apresenta complexidade 
-Θ(𝑛2).
+No melhor caso, a quantidade de comparações permanece igual a um. No pior caso, ela aumenta com o tamanho do vetor: passa de 45 comparações para 10 elementos a 4.950 comparações para 100 elementos.
 
-## Conclusão dos testes
+## Análise teórica da complexidade
 
-A análise permite compreender como a parada antecipada influencia o desempenho do algoritmo. Quando uma duplicata é encontrada rapidamente, a quantidade de comparações é reduzida. Quando não existem elementos repetidos, todos os pares precisam ser examinados.
+A operação fundamental analisada é a comparação entre dois valores do vetor.
 
-Portanto, a contagem de comparações permite analisar o comportamento do algoritmo e compreender como o aumento do tamanho do vetor influencia a quantidade de operações realizadas.
+### Dedução da quantidade de comparações no pior caso
 
+Quando todos os elementos são distintos:
 
-# Análise teórica da complexidade
+- O elemento da posição 0 é comparado com os `n − 1` seguintes.
+- O elemento da posição 1 é comparado com os `n − 2` seguintes.
+- O processo continua até o penúltimo elemento, que é comparado somente com o último.
 
-Esta seção apresenta a análise matemática do algoritmo de detecção de elementos duplicados, considerando a quantidade de comparações entre elementos como operação fundamental.
+Para `n ≥ 2`, a soma das comparações é:
 
-## 1. Dedução da soma de passos no pior caso
-
-O pior caso ocorre quando todos os elementos do vetor são distintos. Nessa situação, o algoritmo precisa examinar todos os pares possíveis, pois nenhuma duplicata é encontrada.
-
-Para um vetor de tamanho n, o primeiro elemento é comparado com os n - 1 elementos seguintes. O segundo é comparado com os n - 2 seguintes, e assim sucessivamente, até a última comparação.
-
-A quantidade total de comparações é representada pela soma:
-
-C(n) = (n - 1) + (n - 2) + ... + 2 + 1
+```text
+C(n) = (n − 1) + (n − 2) + ... + 2 + 1
+```
 
 Reorganizando os termos:
 
-C(n) = 1 + 2 + 3 + ... + (n - 2) + (n - 1)
+```text
+C(n) = 1 + 2 + ... + (n − 2) + (n − 1)
+```
 
-Essa expressão corresponde à soma dos primeiros n - 1 números naturais positivos. Utilizando a fórmula da soma de uma progressão aritmética:
+Essa é uma progressão aritmética com primeiro termo igual a 1, último termo igual a `n − 1` e quantidade de termos igual a `n − 1`.
 
+Aplicando a fórmula da soma:
+
+```text
 S = (primeiro termo + último termo) × quantidade de termos / 2
 
-Temos:
-
-Primeiro termo: 1
-Último termo: n - 1
-Quantidade de termos: n - 1
-
-Substituindo os valores:
-
-C(n) = (1 + (n - 1)) × (n - 1) / 2
-
-Simplificando:
-
-C(n) = n × (n - 1) / 2
-
-Portanto, a quantidade de comparações no pior caso é C(n) = n(n - 1)/2.
+C(n) = (1 + (n − 1)) × (n − 1) / 2
+C(n) = n(n − 1) / 2
+```
 
 Desenvolvendo a expressão:
 
-C(n) = (n² - n)/2 = n²/2 - n/2
+```text
+C(n) = (n² − n) / 2
+C(n) = n²/2 − n/2
+```
 
-O termo dominante é n², indicando crescimento quadrático.
+O termo dominante é `n²`, indicando crescimento quadrático.
 
-## 2. Prova de que o pior caso pertence a O(n²)
+### Limite superior do pior caso — O(n²)
 
-A notação Big O representa um limite superior assintótico para o crescimento da quantidade de operações.
+Para demonstrar que `C(n)` pertence a `O(n²)`, precisamos encontrar constantes positivas `c` e `n₀` tais que:
 
-Formalmente, uma função pertence a O(n²) quando existem constantes positivas c e n₀ tais que 0 ≤ C(n) ≤ c × n² para todo n ≥ n₀.
+```text
+0 ≤ C(n) ≤ c · n², para todo n ≥ n₀
+```
 
-No pior caso, temos:
+Como `n − 1 ≤ n` para `n ≥ 1`:
 
-C(n) = n(n - 1)/2
+```text
+C(n) = n(n − 1) / 2 ≤ n²/2
+```
 
-Como n - 1 ≤ n para n ≥ 1, podemos escrever:
+Escolhendo `c = 1/2` e `n₀ = 1`, a condição é satisfeita. Portanto, o pior caso pertence a `O(n²)`.
 
-C(n) = n(n - 1)/2 ≤ n²/2
+Também podemos estabelecer um limite firme. Para `n ≥ 2`, temos `n − 1 ≥ n/2`, de modo que:
 
-Escolhendo c = 1/2 e n₀ = 1, a condição formal é satisfeita. Portanto, o algoritmo pertence a O(n²) no pior caso.
+```text
+n²/4 ≤ C(n) ≤ n²/2
+```
 
-Isso significa que a quantidade de comparações cresce, no máximo, proporcionalmente ao quadrado do tamanho do vetor, desconsiderando constantes multiplicativas e termos de menor ordem.
+Assim, a quantidade de comparações no pior caso pertence a `Θ(n²)`.
 
-## 3. Prova de que o melhor caso pertence a Ω(1)
+### Limite inferior do melhor caso — Ω(1)
 
-A notação Big Omega representa um limite inferior assintótico.
+No melhor caso, a duplicata aparece nas posições 0 e 1. Para vetores com pelo menos dois elementos:
 
-No melhor caso, a duplicata está nas posições 0 e 1. Para vetores com pelo menos dois elementos, o algoritmo realiza uma comparação e encerra imediatamente a execução.
+```text
+C_melhor(n) = 1, para n ≥ 2
+```
 
-Assim, a quantidade de comparações no melhor caso é C_melhor(n) = 1, para n ≥ 2.
+Para demonstrar que essa função pertence a `Ω(1)`, precisamos encontrar constantes positivas `c` e `n₀` tais que:
 
-Formalmente, uma função pertence a Ω(1) quando existem constantes positivas c e n₀ tais que C_melhor(n) ≥ c para todo n ≥ n₀.
+```text
+C_melhor(n) ≥ c · 1, para todo n ≥ n₀
+```
 
-Escolhendo c = 1 e n₀ = 2, temos `C_melhor
+Escolhendo `c = 1` e `n₀ = 2`:
+
+```text
+C_melhor(n) = 1 ≥ 1 · 1, para todo n ≥ 2
+```
+
+Portanto, o melhor caso pertence a `Ω(1)`. Como a quantidade de comparações é exatamente um nesse cenário, também pertence a `Θ(1)`.
+
+A parada antecipada permite encerrar a busca assim que uma duplicata aparece. Quando todos os elementos são distintos, o algoritmo percorre todos os pares e realiza `n(n − 1)/2` comparações.
